@@ -12,7 +12,7 @@ import br.com.helper.knowledge.service.model.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 @Service
 public class ArticleDomain implements ArticleService {
@@ -28,16 +28,15 @@ public class ArticleDomain implements ArticleService {
 
     @Override
     public ResponseDto save(ArticleReqDto articleReqDto) {
-        System.out.println("XX:" + articleReqDto);
-        System.out.println(articleMapper);
-        Article article = articleRepository.save(articleMapper.createArticle(articleReqDto));
-        return articleMapper.createRespDto(article);
+        return articleMapper.createRespDto(articleRepository.
+                save(articleMapper.createArticle(articleReqDto)));
     }
 
+    @Override
     public Article findOne(String id) {
         return articleRepository.findById(id).
-                orElseThrow(()-> new ObjectNotFoundException(Arrays.
-                        asList(new ValidationMessage("Not Found Article"))));
+                orElseThrow(()-> new ObjectNotFoundException(Collections.
+                        singletonList(new ValidationMessage("Not Found Article"))));
 
     }
 
